@@ -1,4 +1,3 @@
-import {sequelize} from "../config/db";
 import {User} from "./User";
 import {Plan} from "./Plan";
 import {Subscription} from "./Subscription";
@@ -36,6 +35,5 @@ User.hasMany(Notification, {foreignKey: "user_id"});
 Notification.belongsTo(User, {foreignKey: "user_id"});
 
 export {
-    sequelize,
     User, Plan, Subscription, Book, BookCopy, Loan, Review, Notification
 };

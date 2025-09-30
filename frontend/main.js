@@ -1,42 +1,63 @@
+import axios from 'axios';
+
 const API = "http://localhost:4000/api";
 
+const booksList = document.getElementById("booksList");
+const loansList = document.getElementById("loansList");
+const createBookBtn = document.getElementById("createBookBtn");
+
 async function fetchBooks() {
-    const res = await fetch(`${API}/books`);
-    const data = await res.json();
-    const ul = document.getElementById("books");
-    ul.innerHTML = "";
-    data.forEach(b => {
-        const li = document.createElement("li");
-        li.textContent = `${b.title} - ${b.author}`;
-        ul.appendChild(li);
-    });
+  try {
+    const res = await axios.get(`${API}/books`);
+    renderBooks(res.data);
+  } catch (err) {
+    console.error("Error fetching books:", err);
+  }
 }
 
 async function fetchLoans() {
-    const res = await fetch(`${API}/loans`);
-    const data = await res.json();
-    const ul = document.getElementById("loans");
-    ul.innerHTML = "";
-    data.forEach(l => {
-        const li = document.createElement("li");
-        li.textContent = `${l.book_title || l.book?.title || 'book'} — borrower: ${l.borrower_email || l.borrower?.email || 'unknown'} — return: ${l.return_date} — status: ${l.status}`;
-        ul.appendChild(li);
-    });
+  try {
+    const res = await axios.get(`${API}/loans`);
+    renderLoans(res.data);
+  } catch (err) {
+    console.error("Error fetching loans:", err);
+  }
 }
 
-document.getElementById("createBook").addEventListener("click", async () => {
-    try {
-        const res = await fetch(`${API}/books`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json", "Authorization": "Bearer 12345"},
-            body: JSON.stringify({title: "Libro desde Front", author: "Autor Front"})
-        });
-        if (!res.ok) throw new Error("Error creating");
-        alert("Libro creado");
-        await fetchBooks();
-    } catch (e) {
-        alert("error: " + e);
-    }
-});
-fetchBooks().then(r => r);
-fetchLoans().then(r => r);
+async function createBook() {
+  try {
+    await axios.post(
+      `${API}/books`,
+      { title: "Nuevo Libro desde Front", author: "Autor Demo" },
+      { headers: { Authorization: "Bearer 12345" } }
+    );
+
+    alert("Libro creado");
+    await fetchBooks();
+  } catch (err) {
+    alert(err.response?.data?.message || "Error al crear libro");
+    console.error("Error creating book:", err);
+  }
+}
+
+function renderBooks(books) {
+  booksList.innerHTML = "";
+  books.forEach(b => {
+    const li = document.createElement("li");
+    li.textContent = `${b.title} - ${b.author}`;
+    booksList.appendChild(li);
+  });
+}
+
+function renderLoans(loans) {
+  loansList.innerHTML = "";
+  loans.forEach(l => {
+    const li = document.createElement("li");
+    li.textContent = `${l.book?.title || "Unknown"} — borrower: ${l.borrower?.email || "N/A"} — return: ${l.return_date || "N/A"} — status: ${l.status || "N/A"}`;
+    loansList.appendChild(li);
+  });
+}
+
+await fetchBooks();
+await fetchLoans();
+createBookBtn.addEventListener("click", createBook);
