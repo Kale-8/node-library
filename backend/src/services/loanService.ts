@@ -1,7 +1,4 @@
-import {Loan} from "../models/Loan";
-import {User} from "../models/User";
-import {Book} from "../models/Book";
-import {Notification} from "../models/Notification";
+import {Loan, User, Book, Notification} from "../models";
 import {Op} from "sequelize";
 
 export const loanService = {

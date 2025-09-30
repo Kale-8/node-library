@@ -1,5 +1,15 @@
-import { loanService } from "../services/loanService";
+import {Request, Response} from "express";
+import {loanService} from "../services/loanService";
+
 export const loanController = {
-  async list(req:any,res:any){ const loans = await loanService.listAll(); res.json(loans); },
-  async create(req:any,res:any){ const loan = await loanService.create(req.body); res.status(201).json(loan); }
+    async list(req: Request, res: Response) {
+        const loans = await loanService.listAll();
+        res.json(loans);
+    },
+
+    async create(req: Request, res: Response) {
+        const data = req.body;
+        const loan = await loanService.create(data);
+        res.status(201).json(loan);
+    }
 };

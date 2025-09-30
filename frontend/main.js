@@ -33,10 +33,10 @@ document.getElementById("createBook").addEventListener("click", async () => {
         });
         if (!res.ok) throw new Error("Error creating");
         alert("Libro creado");
-        fetchBooks();
+        await fetchBooks();
     } catch (e) {
         alert("error: " + e);
     }
 });
-fetchBooks();
-fetchLoans();
+fetchBooks().then(r => r);
+fetchLoans().then(r => r);

@@ -1,7 +1,5 @@
 import {DataTypes, Model, Optional} from "sequelize";
 import {sequelize} from "../config/db";
-import {User} from "./User";
-import {Plan} from "./Plan";
 
 interface SubAttrs {
     id: number;

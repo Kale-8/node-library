@@ -10,6 +10,8 @@ interface LoanAttrs {
     return_date: Date;
     actual_return_date?: Date | null;
     status: string;
+    created_at: Date;
+    updated_at: Date;
 }
 
 type LoanCreate = Optional<LoanAttrs, "id" | "actual_return_date" | "status">;
@@ -23,6 +25,8 @@ export class Loan extends Model<LoanAttrs, LoanCreate> implements LoanAttrs {
     public return_date!: Date;
     public actual_return_date?: Date | null;
     public status!: string;
+    public created_at!: Date;
+    public updated_at!: Date;
 }
 
 Loan.init({
