@@ -10,7 +10,7 @@ export const notificationController = {
 
     async create(req: Request, res: Response) {
         const body = req.body;
-        if (!body.user_id || !body.message) return res.status(400).json({message: "user_id and message required"});
+        if (!body.user_id || !body.message) throw {status: 400, message: "user_id and message required"};
         const created = await notificationService.create(body);
         res.status(201).json(created);
     },
@@ -18,14 +18,14 @@ export const notificationController = {
     async markRead(req: Request, res: Response) {
         const id = Number(req.params.id);
         const updated = await notificationService.markRead(id);
-        if (!updated) return res.status(404).json({message: "Notification not found"});
+        if (!updated) throw {status: 404, message: "Not found"};
         res.json(updated);
     },
 
     async remove(req: Request, res: Response) {
         const id = Number(req.params.id);
         const ok = await notificationService.remove(id);
-        if (!ok) return res.status(404).json({message: "Notification not found"});
+        if (!ok) throw {status: 404, message: "Not found"};
         res.json({message: "deleted"});
     }
 };

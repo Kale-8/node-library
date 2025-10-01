@@ -10,13 +10,13 @@ export const bookCopyController = {
     async get(req: Request, res: Response) {
         const id = Number(req.params.id);
         const copy = await bookCopyService.getById(id);
-        if (!copy) return res.status(404).json({message: "Copy not found"});
+        if (!copy) throw {status: 404, message: "Not found"};
         res.json(copy);
     },
 
     async create(req: Request, res: Response) {
         const body = req.body;
-        if (!body.book_id) return res.status(400).json({message: "book_id required"});
+        if (!body.book_id) throw {status: 400, message: "book_id required"};
         const created = await bookCopyService.create(body);
         res.status(201).json(created);
     },
@@ -24,14 +24,14 @@ export const bookCopyController = {
     async update(req: Request, res: Response) {
         const id = Number(req.params.id);
         const updated = await bookCopyService.update(id, req.body);
-        if (!updated) return res.status(404).json({message: "Copy not found"});
+        if (!updated) throw {status: 404, message: "Not found"};
         res.json(updated);
     },
 
     async remove(req: Request, res: Response) {
         const id = Number(req.params.id);
         const ok = await bookCopyService.remove(id);
-        if (!ok) return res.status(404).json({message: "Copy not found"});
+        if (!ok) throw {status: 404, message: "Not found"};
         res.json({message: "deleted"});
     }
 };

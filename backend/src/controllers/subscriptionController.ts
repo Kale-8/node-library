@@ -10,13 +10,16 @@ export const subscriptionController = {
     async get(req: Request, res: Response) {
         const id = Number(req.params.id);
         const sub = await subscriptionService.getById(id);
-        if (!sub) return res.status(404).json({message: "Subscription not found"});
+        if (!sub) throw {status: 404, message: "Not found"};
         res.json(sub);
     },
 
     async create(req: Request, res: Response) {
         const body = req.body;
-        if (!body.user_id || !body.plan_id || !body.start_date) return res.status(400).json({message: "user_id, plan_id and start_date required"});
+        if (!body.user_id || !body.plan_id || !body.start_date) throw {
+            status: 400,
+            message: "user_id, plan_id and start_date required"
+        };
         const created = await subscriptionService.create(body);
         res.status(201).json(created);
     },
@@ -30,14 +33,14 @@ export const subscriptionController = {
     async cancel(req: Request, res: Response) {
         const id = Number(req.params.id);
         const canceled = await subscriptionService.cancel(id);
-        if (!canceled) return res.status(404).json({message: "Subscription not found"});
+        if (!canceled) throw {status: 404, message: "Not found"};
         res.json(canceled);
     },
 
     async remove(req: Request, res: Response) {
         const id = Number(req.params.id);
         const ok = await subscriptionService.remove(id);
-        if (!ok) return res.status(404).json({message: "Subscription not found"});
+        if (!ok) throw {status: 404, message: "Not found"};
         res.json({message: "deleted"});
     }
 };

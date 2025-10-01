@@ -16,7 +16,7 @@ export const reviewController = {
     async create(req: Request, res: Response) {
         const body = req.body;
         if (!body.book_id || !body.reviewer_id || !body.rating) return res.status(400).json({message: "book_id, reviewer_id and rating required"});
-        if (body.rating < 1 || body.rating > 5) return res.status(400).json({message: "rating must be 1-5"});
+        if (body.rating < 1 || body.rating > 5) throw {status: 400, message: "rating must be 1-5"};
         const created = await reviewService.create(body);
         res.status(201).json(created);
     },
@@ -24,7 +24,7 @@ export const reviewController = {
     async remove(req: Request, res: Response) {
         const id = Number(req.params.id);
         const ok = await reviewService.remove(id);
-        if (!ok) return res.status(404).json({message: "Review not found"});
+        if (!ok) throw {status: 404, message: "Not found"};
         res.json({message: "deleted"});
     }
 };

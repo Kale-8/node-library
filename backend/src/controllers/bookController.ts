@@ -10,7 +10,7 @@ export const bookController = {
     async get(req: Request, res: Response) {
         const id = Number(req.params.id);
         const book = await bookService.getById(id);
-        if (!book) return res.status(404).json({message: "Not found"});
+        if (!book) throw {status: 404, message: "Not found"};
         res.json(book);
     },
 
@@ -23,14 +23,14 @@ export const bookController = {
     async update(req: Request, res: Response) {
         const id = Number(req.params.id);
         const updated = await bookService.update(id, req.body);
-        if (!updated) return res.status(404).json({message: "Not found"});
+        if (!updated) throw {status: 404, message: "Not found"};
         res.json(updated);
     },
 
     async remove(req: Request, res: Response) {
         const id = Number(req.params.id);
         const ok = await bookService.remove(id);
-        if (!ok) return res.status(404).json({message: "Not found"});
+        if (!ok) throw {status: 404, message: "Not found"};
         res.json({message: "deleted"});
     }
 };

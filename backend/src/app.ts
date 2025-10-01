@@ -8,6 +8,8 @@ import {requestLogger} from "./middlewares/logger";
 import {sequelize} from "./config/db";
 import logger from "./utils/logger";
 import {startReminders} from "./cron/reminders";
+import {requestValidator} from "./middlewares/requestValidator.ts";
+import {errorHandler} from "./middlewares/errorHandler.ts";
 
 const app = express();
 
@@ -17,9 +19,12 @@ app.use(cors({
             callback(new Error("Not allowed by CORS"))
 }));
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 app.use(requestLogger);
+app.use(requestValidator);
 app.use("/api", routes);
 app.get("/", (req, res) => res.send("Library API running"));
+app.use(errorHandler);
 
 export async function initApp() {
     try {
