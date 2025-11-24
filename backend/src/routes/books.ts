@@ -1,0 +1,14 @@
+import {Router} from "express";
+import {bookController} from "../controllers/bookController";
+import {validateBook} from "../middlewares/validate";
+import {authMiddleware} from "../middlewares/auth";
+
+const router = Router();
+
+router.get("/", bookController.list);
+router.get("/:id", bookController.get);
+router.post("/", authMiddleware, validateBook, bookController.create);
+router.put("/:id", authMiddleware, validateBook, bookController.update);
+router.delete("/:id", authMiddleware, bookController.remove);
+
+export default router;
